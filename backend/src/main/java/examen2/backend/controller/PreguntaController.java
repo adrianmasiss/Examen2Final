@@ -48,7 +48,6 @@ public class PreguntaController {
                 .collect(Collectors.toList());
     }
 
-    // NUEVO: Endpoint para obtener una pregunta con opciones
     @GetMapping("/{id}")
     public PreguntaDTO getPregunta(@PathVariable Integer id) {
         Pregunta p = preguntaRepo.findById(id).orElseThrow();
@@ -61,6 +60,7 @@ public class PreguntaController {
                         .collect(Collectors.toList())
         );
     }
+
 
     @PostMapping("/{id}/responder")
     public RespuestaFeedback responderPregunta(

@@ -28,8 +28,14 @@ export default function Preguntas({ user }) {
         fetch(`/api/preguntas/${id}`, {
             headers: { Authorization: "Bearer " + user.token }
         })
-            .then(res => res.json())
-            .then(data => setPreguntaSel(data));
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Pregunta no encontrada");
+                }
+                return res.json();
+            })
+            .then(data => setPreguntaSel(data))
+            .catch(err => alert(err.message));
     };
 
     const getRespuestaTexto = resp =>

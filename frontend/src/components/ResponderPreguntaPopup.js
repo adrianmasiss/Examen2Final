@@ -30,6 +30,9 @@ export default function ResponderPreguntaPopup({ pregunta, user, onClose, onResp
                 },
                 body: JSON.stringify({ seleccionada }) // solo el id
             });
+            if (!res.ok) {
+                throw new Error("No se pudo registrar la respuesta");
+            }
             const data = await res.json();
             setFeedback(data.correcta); // true si la respuesta fue correcta
             if (onRespondido) onRespondido(data);

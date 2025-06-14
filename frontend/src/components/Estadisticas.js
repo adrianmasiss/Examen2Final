@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-export default function Estadisticas({ user }) {
+export default function Estadisticas({ user, refreshKey }) {
     const [stats, setStats] = useState({ aciertos: 0, fallos: 0, nota: 0 });
 
     useEffect(() => {
@@ -9,7 +9,7 @@ export default function Estadisticas({ user }) {
         })
             .then(res => res.json())
             .then(data => setStats(data));
-    }, [user]);
+    }, [user, refreshKey]);
 
     return (
         <div className="estadisticas">

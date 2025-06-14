@@ -6,7 +6,7 @@ export default function Preguntas({ user }) {
     const [topico, setTopico] = useState("");
     const [preguntas, setPreguntas] = useState([]);
     const [preguntaSel, setPreguntaSel] = useState(null);
-    const [refresh, setRefresh] = useState(false);
+    const [refresh, setRefresh] = useState(false); // fuerza actualizacion de estadisticas
     const [respondidas, setRespondidas] = useState([]);
 
     // Buscar preguntas (sin opciones)
@@ -21,7 +21,18 @@ export default function Preguntas({ user }) {
     useEffect(() => {
         setPreguntas([]);
         setRespondidas([]);
-    }, [user, refresh]);
+        fetch("/api/respuestas", {
+            headers: { Authorization: "Bearer " + user.token }
+        })
+            .then(res => res.json())
+            .then(data => setRespondidas(data));
+    }, [user]);
+
+    // cuando refresh cambia solo vaciamos las preguntas para ocultar las que
+    // fueron respondidas y permitir una nueva busqueda
+    useEffect(() => {
+        setPreguntas([]);
+    }, [refresh]);
 
     // Obtener los datos completos de la pregunta (con opciones) antes de abrir popup
     const mostrarPregunta = (id) => {
@@ -45,7 +56,7 @@ export default function Preguntas({ user }) {
 
     return (
         <div className="preguntas-container">
-            <Estadisticas user={user} />
+            <Estadisticas user={user} refreshKey={refresh} />
             <div className="busqueda">
                 <input
                     placeholder="Buscar por tópico..."

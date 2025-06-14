@@ -16,7 +16,6 @@ export default function App() {
 
     return (
         <div className="app-container">
-            {/* Header bonito con logo, usuario/avatar y navegación */}
             <Header user={user} logout={logout} />
 
             <main>

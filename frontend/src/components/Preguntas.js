@@ -6,21 +6,25 @@ export default function Preguntas({ user }) {
     const [topico, setTopico] = useState("");
     const [preguntas, setPreguntas] = useState([]);
     const [preguntaSel, setPreguntaSel] = useState(null);
-    const [refresh, setRefresh] = useState(false); // fuerza actualización de estadísticas
+    const [refresh, setRefresh] = useState(false);
     const [respondidas, setRespondidas] = useState([]);
+    const [busquedaRealizada, setBusquedaRealizada] = useState(false);
 
-    // Buscar preguntas (sin opciones)
     const buscar = () => {
         fetch("/api/preguntas?topico=" + encodeURIComponent(topico), {
             headers: { Authorization: "Bearer " + user.token }
         })
             .then(res => res.json())
-            .then(data => setPreguntas(data));
+            .then(data => {
+                setPreguntas(data);
+                setBusquedaRealizada(true);
+            });
     };
 
     useEffect(() => {
         setPreguntas([]);
         setRespondidas([]);
+        setBusquedaRealizada(false);
         fetch("/api/respuestas", {
             headers: { Authorization: "Bearer " + user.token }
         })
@@ -30,9 +34,9 @@ export default function Preguntas({ user }) {
 
     useEffect(() => {
         setPreguntas([]);
+        setBusquedaRealizada(false); // reset búsqueda al refrescar
     }, [refresh]);
 
-    // Obtener los datos completos de la pregunta (con opciones) antes de abrir popup
     const mostrarPregunta = (id) => {
         fetch(`/api/preguntas/${id}`, {
             headers: { Authorization: "Bearer " + user.token }
@@ -59,11 +63,13 @@ export default function Preguntas({ user }) {
                 <button onClick={buscar}>Buscar</button>
             </div>
             <div className="lista-preguntas">
-                {(preguntas.length === 0 && respondidas.length === 0) ? (
+                {preguntas.length === 0 && busquedaRealizada && (
                     <div className="sin-preguntas">
-                        <div>No hay preguntas disponibles.</div>
+                        <div>No hay preguntas para mostrar.</div>
                     </div>
-                ) : (preguntas.length === 0 && respondidas.length > 0) ? (
+                )}
+
+                {respondidas.length > 0 && (
                     <div className="historial-preguntas">
                         <h4 style={{margin: "24px 0 10px", color: "#555"}}>Preguntas Respondidas:</h4>
                         <div className="tabla-respondidas-wrapper">
@@ -88,14 +94,14 @@ export default function Preguntas({ user }) {
                                         <td>
                                             {r.correcta ? (
                                                 <span className="icon-correcta">
-                                            <img src="/correcta.png" alt="Correcta"/>
-                                            Correcta
-                                        </span>
+                                                        <img src="/correcta.png" alt="Correcta"/>
+                                                        Correcta
+                                                    </span>
                                             ) : (
                                                 <span className="icon-incorrecta">
-                                            <img src="/incorrecta.png" alt="Incorrecta"/>
-                                            Incorrecta
-                                        </span>
+                                                        <img src="/incorrecta.png" alt="Incorrecta"/>
+                                                        Incorrecta
+                                                    </span>
                                             )}
                                         </td>
                                         <td>
@@ -107,16 +113,22 @@ export default function Preguntas({ user }) {
                             </table>
                         </div>
                     </div>
-                ) : (
+                )}
+                {preguntas.length === 0 && !busquedaRealizada && respondidas.length === 0 && (
+                    <div className="sin-preguntas">
+                        <div>No hay preguntas disponibles.</div>
+                    </div>
+                )}
+                {preguntas.length > 0 && (
                     <ul>
                         {preguntas.map(p => (
                             <li key={p.id} className="pregunta-item">
-                    <span>
-                        <strong>{p.texto}</strong>
-                        <em style={{marginLeft: 10, fontSize: "0.9em"}}>
-                            ({p.topico})
-                        </em>
-                    </span>
+                                <span>
+                                    <strong>{p.texto}</strong>
+                                    <em style={{marginLeft: 10, fontSize: "0.9em"}}>
+                                        ({p.topico})
+                                    </em>
+                                </span>
                                 <button onClick={() => mostrarPregunta(p.id)}>Responder</button>
                             </li>
                         ))}

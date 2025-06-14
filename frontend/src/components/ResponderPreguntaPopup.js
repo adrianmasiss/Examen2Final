@@ -20,7 +20,7 @@ export default function ResponderPreguntaPopup({ pregunta, user, onClose, onResp
 
     const responder = async (e) => {
         e.preventDefault();
-        if (!seleccionada) return; // No dejes enviar si no eligió nada
+        if (!seleccionada) return;
         try {
             const res = await fetch(`/api/preguntas/${pregunta.id}/responder`, {
                 method: "POST",
@@ -28,13 +28,13 @@ export default function ResponderPreguntaPopup({ pregunta, user, onClose, onResp
                     "Content-Type": "application/json",
                     Authorization: "Bearer " + user.token
                 },
-                body: JSON.stringify({ seleccionada }) // solo el id
+                body: JSON.stringify({ seleccionada })
             });
             if (!res.ok) {
                 throw new Error("No se pudo registrar la respuesta");
             }
             const data = await res.json();
-            setFeedback(data.correcta); // true si la respuesta fue correcta
+            setFeedback(data.correcta);
             const opcionTexto = pregunta.opciones.find(op => op.id === seleccionada)?.texto || "";
             if (onRespondido) onRespondido({ ...data, opcionTexto });
         } catch (err) {

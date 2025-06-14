@@ -29,7 +29,6 @@ public class PreguntaController {
     @Autowired
     private examen2.backend.data.UserRepository userRepo;
 
-    // NUEVO: Buscar preguntas (solo resumen, SIN opciones)
     @GetMapping
     public List<PreguntaResumenDTO> buscarPreguntas(@RequestParam(value = "topico", required = false) String topico) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

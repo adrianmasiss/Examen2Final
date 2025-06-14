@@ -5,7 +5,7 @@ export default function Header({ user, logout }) {
     return (
         <header className="header">
             <div className="header-content">
-                {/* Izquierda: Logo y Título */}
+
                 <div className="header-logo-title">
                     <img
                         src="/logo.png"
@@ -15,17 +15,17 @@ export default function Header({ user, logout }) {
                     />
                     <span className="header-title">Autoevaluación</span>
                 </div>
-                {/* Derecha: Navegación */}
+
                 <nav className="header-nav">
                     <Link className="nav-btn" to="/">Inicio</Link>
                     {user && (
                         <>
                             <Link className="nav-btn" to="/preguntas">Preguntas</Link>
-                            <span className="usuario">
+                            <span className="nav-btn usuario">
                                 <img src="/user.png" alt="Avatar" />
                                 {user.nombre}
                             </span>
-                            <button className="nav-btn" onClick={logout}>Salir</button>
+                            <button className="nav-btn salir-btn" onClick={logout}>Salir</button>
                         </>
                     )}
                     {!user && (

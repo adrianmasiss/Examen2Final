@@ -1,4 +1,3 @@
-// src/main/java/examen2/backend/DTO/PreguntaResumenDTO.java
 package examen2.backend.DTO;
 
 public class PreguntaResumenDTO {

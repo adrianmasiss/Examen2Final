@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Inicio from "./components/Inicio";
 import LoginPopup from "./components/LoginPopup";
 import Preguntas from "./components/Preguntas";
@@ -6,40 +7,39 @@ import Header from "./components/Header";
 
 export default function App() {
     const [user, setUser] = useState(null);
-    const [mostrarLogin, setMostrarLogin] = useState(false);
-    const [pagina, setPagina] = useState("inicio");
+    const navigate = useNavigate();
 
     const logout = () => {
         setUser(null);
-        setPagina("inicio");
+        navigate("/");
     };
 
     return (
         <div className="app-container">
             {/* Header bonito con logo, usuario/avatar y navegación */}
-            <Header
-                user={user}
-                setPagina={setPagina}
-                setMostrarLogin={setMostrarLogin}
-                logout={logout}
-            />
+            <Header user={user} logout={logout} />
 
             <main>
-                {pagina === "inicio" && <Inicio />}
-                {pagina === "preguntas" && user && <Preguntas user={user} />}
+                <Routes>
+                    <Route path="/" element={<Inicio />} />
+                    <Route
+                        path="/preguntas"
+                        element={user ? <Preguntas user={user} /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/login"
+                        element={
+                            <LoginPopup
+                                setUser={u => {
+                                    setUser(u);
+                                    navigate("/preguntas");
+                                }}
+                                onClose={() => navigate("/")}
+                            />
+                        }
+                    />
+                </Routes>
             </main>
-
-            {/* Popup de login */}
-            {mostrarLogin && (
-                <LoginPopup
-                    setUser={user => {
-                        setUser(user);
-                        setMostrarLogin(false);
-                        setPagina("preguntas");
-                    }}
-                    onClose={() => setMostrarLogin(false)}
-                />
-            )}
         </div>
     );
 }

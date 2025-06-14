@@ -1,6 +1,8 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function Header({ user, setPagina, setMostrarLogin, logout }) {
+export default function Header({ user, logout }) {
+    const navigate = useNavigate();
     return (
         <header
             className="header"
@@ -29,22 +31,18 @@ export default function Header({ user, setPagina, setMostrarLogin, logout }) {
             </div>
             {/* Navegación */}
             <nav style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <button
-                    className="login-btn"
-                    style={{ fontWeight: 500 }}
-                    onClick={() => setPagina("inicio")}
-                >
+                <Link className="login-btn" style={{ fontWeight: 500 }} to="/">
                     Inicio
-                </button>
+                </Link>
                 {user && (
                     <>
-                        <button
+                        <Link
                             className="login-btn"
                             style={{ fontWeight: 500 }}
-                            onClick={() => setPagina("preguntas")}
+                            to="/preguntas"
                         >
                             Preguntas
-                        </button>
+                        </Link>
                         <span
                             className="usuario"
                             style={{
@@ -81,7 +79,7 @@ export default function Header({ user, setPagina, setMostrarLogin, logout }) {
                     <button
                         className="login-btn"
                         style={{ fontWeight: 500 }}
-                        onClick={() => setMostrarLogin(true)}
+                        onClick={() => navigate("/login")}
                     >
                         Ingresar
                     </button>

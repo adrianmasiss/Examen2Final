@@ -35,7 +35,8 @@ export default function ResponderPreguntaPopup({ pregunta, user, onClose, onResp
             }
             const data = await res.json();
             setFeedback(data.correcta); // true si la respuesta fue correcta
-            if (onRespondido) onRespondido(data);
+            const opcionTexto = pregunta.opciones.find(op => op.id === seleccionada)?.texto || "";
+            if (onRespondido) onRespondido({ ...data, opcionTexto });
         } catch (err) {
             setFeedback(false);
         }

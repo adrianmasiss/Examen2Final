@@ -4,6 +4,7 @@ import Inicio from "./components/Inicio";
 import LoginPopup from "./components/LoginPopup";
 import Preguntas from "./components/Preguntas";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export default function App() {
     const [user, setUser] = useState(null);
@@ -39,6 +40,7 @@ export default function App() {
                     />
                 </Routes>
             </main>
+            <Footer />
         </div>
     );
 }

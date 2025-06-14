@@ -10,6 +10,13 @@ body {
     transition: background 0.8s cubic-bezier(.7,0,.3,1);
 }
 
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
 /* -------- HEADER  -------- */
 .header {
     background: linear-gradient(87deg, #1e354c 0%, #235080 55%, #26a0fa 100%);
